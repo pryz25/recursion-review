@@ -4,22 +4,23 @@
 // };
 
 // But instead we're going to implement it from scratch:
-var getElementsByClassName = function(className, node
+var getElementsByClassName = function(className
 ) {
-  var node = node || document.body;
-  
   var targetNodes = [];
   
-  var getNodes = function(className, node){
-    var childNodes = node.childNodes;
-    for (var i = 0; i < childNodes.length; i++) {
-      if (childNodes[i].className === className) {
-          targetNodes.push(childNodes[i])
+  var getNodes = function(className, node) {
+    if (node.classList && node.classList.contains(className)) {
+      targetNodes.push(node);
+    }
+      if (node.hasChildNodes()) {
+        var childNodes = node.childNodes;
+        for (var i = 0; i < childNodes.length; i++) {
+          getNodes(className, childNodes[i]);
+        }
       }
-      getNodes(className, childNodes[i]);
   }
-  
-  }
+
+  getNodes(className, document.body);
   // You should use document.body, element.childNodes, and element.classList
   // For each node in the DOM tree:
     // See if node has target class name...
@@ -27,4 +28,5 @@ var getElementsByClassName = function(className, node
     // if not, continue
     // for each child node...
       // recursively run getElementsByClassName to get child nodes with target class name
+  return targetNodes.slice();
 };
